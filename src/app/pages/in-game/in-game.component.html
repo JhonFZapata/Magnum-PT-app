@@ -1,13 +1,13 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100 p-6">
   <div class="max-w-3xl w-full bg-white p-8 rounded-lg shadow-lg">
-    <h2 class="text-2xl font-semibold text-center mb-4">{{ 'playerOne.name' }} Vs {{ 'playerTwo.name' }}</h2>
+    <h2 class="text-2xl font-semibold text-center mb-4">Piedra, Papel o Tijera</h2>
     <hr class="mb-4">
 
     <!-- Iniciar el juego -->
     <div *ngIf="!game" class="mb-6">
       <p class="text-center mb-4">Ingresa los IDs de los jugadores para iniciar el juego:</p>
       <div class="flex justify-between items-center mb-4">
-        <label for="playerOneId" class="font-medium">Jugador 1 ID:</label>
+        <label for="playerOneId" class="font-medium">Jugador 1:</label>
         <input 
           type="text" 
           id="playerOneId" 
@@ -17,7 +17,7 @@
       </div>
 
       <div class="flex justify-between items-center mb-4">
-        <label for="playerTwoId" class="font-medium">Jugador 2 ID:</label>
+        <label for="playerTwoId" class="font-medium">Jugador 2:</label>
         <input 
           type="text" 
           id="playerTwoId" 
@@ -35,7 +35,7 @@
         </button>
             <a 
               role="button"
-              routerLink="/game" 
+              routerLink="/" 
               class="text-blue-500 text-center px-6 py-2 border hover:text-blue-900 transition duration-300 block mx-auto"
           >
               Registrarnos
@@ -45,41 +45,33 @@
 
     <!-- Mostrar el estado del juego -->
     <div *ngIf="game" class="mb-6">
+      <h2 class="text-2xl font-semibold text-center mb-4">{{ playerOneName | titlecase }} vs {{ playerTwoName | titlecase }}</h2>
       <h3 class="text-xl font-medium mb-4">Rondas Jugadas: {{ game.rounds.length }}</h3>
-      <ul class="mb-4">
-        <li 
-          *ngFor="let round of game.rounds" 
-          class="bg-gray-100 p-4 rounded-lg mb-2"
-        >
-          <p>Ronda {{ round.id }}: 
-            Movimiento Jugador 1: {{ round.playerOneMove }} - 
-            Movimiento Jugador 2: {{ round.playerTwoMove }} - 
-            Ganador: {{ round.winnerPlayerId === game?.playerOneId ? 'Jugador 1' : round.winnerPlayerId === game?.playerTwoId ? 'Jugador 2' : 'Empate' }}
-          </p>
-        </li>
-      </ul>
+
 
       <!-- Selección de movimientos para la siguiente ronda -->
       <div *ngIf="!game.isFinished" class="mb-4">
         <p class="text-center mb-4">Elige el movimiento para ambos jugadores:</p>
         <div class="flex justify-between items-center mb-4">
-          <label class="font-medium">Movimiento Jugador 1:</label>
+          <label class="font-medium">Turno para {{playerOneName}}:</label>
           <select 
             [(ngModel)]="playerOneMove" 
             class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
           >
-            <option value="Piedra">Piedra</option>
-            <option value="Papel">Papel</option>
-            <option value="Tijera">Tijera</option>
-          </select>
+          <option value="" selected>Elije tu movimiento</option>
+          <option value="Piedra">Piedra</option>
+          <option value="Papel">Papel</option>
+          <option value="Tijera">Tijera</option>
+        </select>
         </div>
 
         <div class="flex justify-between items-center mb-4">
-          <label class="font-medium">Movimiento Jugador 2:</label>
+          <label class="font-medium">Turno para {{playerTwoName}}:</label>
           <select 
-            [(ngModel)]="playerTwoMove" 
-            class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+          [(ngModel)]="playerTwoMove" 
+          class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
           >
+          <option value="" selected>Elije tu movimiento</option>
             <option value="Piedra">Piedra</option>
             <option value="Papel">Papel</option>
             <option value="Tijera">Tijera</option>
@@ -95,6 +87,20 @@
           </button>
         </div>
       </div>
+
+      <!-- Movimientos -->
+      <ul class="mb-4">
+        <li 
+          *ngFor="let round of game.rounds; let i = index" 
+          class="bg-gray-100 p-4 rounded-lg mb-2" 
+        >
+          <p class="border border-blue-500 rounded-sm p-5"><b>Ronda:</b> {{ i + 1 }} <br><hr> 
+            <b>{{playerOneName}}</b> juega: {{ round.playerOneMove }} <br>
+            <b>{{playerTwoName}}</b> juega: {{ round.playerTwoMove }} <br>
+            <span class="text-green-600 font-medium">Ganador:</span> {{ round.winnerPlayerId === game?.playerOneId ? playerOneName : round.winnerPlayerId === game?.playerTwoId ? playerTwoName : 'Empate' }}
+          </p>
+        </li>
+      </ul>
 
       <!-- Mostrar mensaje del estado del juego -->
       <p class="text-center text-lg font-medium text-blue-600">{{ message }}</p>

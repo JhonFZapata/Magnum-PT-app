@@ -16,6 +16,8 @@ export interface RoundDTO {
   playerOneMove: string;
   playerTwoMove: string;
   winnerPlayerId?: number;
+  playerOneName?: string;
+  playerTwoName?: string;
 }
 
 

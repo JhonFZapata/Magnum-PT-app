@@ -16,6 +16,8 @@ export class InGameComponent implements OnInit {
   game: GameDTO | null = null;
   playerOneMove: string = '';
   playerTwoMove: string = '';
+  playerOneName: string | undefined = '';
+  playerTwoName: string | undefined = '';
   message: string = '';
 
   constructor(
@@ -69,6 +71,9 @@ export class InGameComponent implements OnInit {
       .playRound(this.game.id, this.playerOneMove, this.playerTwoMove)
       .subscribe(
         (round) => {
+          //
+          this.playerOneName = round.playerOneName
+          this.playerTwoName = round.playerTwoName
           // Actualiza el estado del juego después de cada ronda
           this.inGamerService.getGameStatus(this.game!.id).subscribe((updatedGame) => {
             this.game = updatedGame;
