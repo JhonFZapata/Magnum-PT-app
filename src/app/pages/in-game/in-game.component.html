@@ -11,7 +11,7 @@
         <input 
           type="text" 
           id="playerOneId" 
-          #playerOneId 
+          #playerOneName 
           class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
         />
       </div>
@@ -21,14 +21,14 @@
         <input 
           type="text" 
           id="playerTwoId" 
-          #playerTwoId 
+          #playerTwoName 
           class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
         />
       </div>
 
       <div class="text-center">
         <button 
-          (click)="startGame(+playerOneId.value, +playerTwoId.value)" 
+          (click)="startGame(playerOneName.value, playerTwoName.value)" 
           class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
         >
           Iniciar Juego
@@ -41,6 +41,8 @@
               Registrarnos
           </a>
       </div>
+       <!-- Mostrar mensaje del estado del juego -->
+       <p class="text-center text-lg font-medium text-red-600">{{ errorMessage }}</p>
     </div>
 
     <!-- Mostrar el estado del juego -->
@@ -101,9 +103,20 @@
           </p>
         </li>
       </ul>
-
       <!-- Mostrar mensaje del estado del juego -->
       <p class="text-center text-lg font-medium text-blue-600">{{ message }}</p>
+      
+      <!-- Botones de reinicio -->
+      <div *ngIf="game.isFinished">
+          <a 
+              role="button"
+              routerLink="/" 
+              class="text-blue-500 text-center px-6 py-2 border hover:text-blue-900 transition duration-300 block mx-auto"
+            >
+              Volver a jugar
+            </a>
+      </div>
+
     </div>
   </div>
 </div>

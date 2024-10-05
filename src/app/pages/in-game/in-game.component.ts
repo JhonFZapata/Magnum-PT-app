@@ -16,9 +16,10 @@ export class InGameComponent implements OnInit {
   game: GameDTO | null = null;
   playerOneMove: string = '';
   playerTwoMove: string = '';
-  playerOneName: string | undefined = '';
-  playerTwoName: string | undefined = '';
+  playerOneName: string = '';
+  playerTwoName: string = '';
   message: string = '';
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,10 +45,14 @@ export class InGameComponent implements OnInit {
   }
 
   // Iniciar el juego con dos jugadores
-  startGame(playerOneId: number, playerTwoId: number) {
-    this.inGamerService.startGame(playerOneId, playerTwoId).subscribe(
+  startGame(playerOneName: string, playerTwoName: string) {
+    this.inGamerService.startGame(playerOneName, playerTwoName).subscribe(
       (game) => {
-        this.game = game;
+        console.log('gaem T',game);
+        
+        this.game = game.game;
+        this.playerOneName = playerOneName
+        this.playerTwoName = playerTwoName
         // Verifica que rounds existe y es un array
         if (!this.game.rounds) {
           this.game.rounds = [];  // Si no existe, inicialízalo como un array vacío
@@ -55,6 +60,7 @@ export class InGameComponent implements OnInit {
         this.message = 'Juego iniciado. ¡Elige tus movimientos!';
       },
       (error) => {
+        this.errorMessage = error.error.message
         console.error('Error al iniciar el juego', error);
       }
     );
@@ -80,7 +86,7 @@ export class InGameComponent implements OnInit {
 
             if (this.game.isFinished) {
               this.message = `¡El juego ha terminado! El ganador es el jugador ${
-                this.game.winnerPlayerId === this.game.playerOneId ? '1' : '2'
+                this.game.winnerPlayerId === this.game.playerOneId ? this.playerOneName : this.playerTwoName
               }.`;
             } else {
               this.message = 'Ronda jugada. Continúa jugando.';
@@ -92,30 +98,5 @@ export class InGameComponent implements OnInit {
         }
       );
   }    
-
-  // createMovement(){
-  //   // VAlidacion de formulario
-  //   if (!this.newForm.valid) {
-  //     console.log(this.newForm.value);
-      
-  //     this.newForm.markAllAsTouched(); // Mostrar los errores si los hay
-  //     return;
-  //   }
-
-  //   const data = {
-  //     playerOneName:this.newForm.get('movement')?.value,
-  //     // playerTwoName:this.newForm.get('playerTwo')?.value,
-  //   };
-
-  //   this.inGamerService.createMovement(data).subscribe({
-  //     next: (response) => {
-  //       console.log('res:', response);
-  //     },
-  //     error: (error) => {
-  //       this.errorMessage = error.error.message;
-  //       console.error('Error al intentar registrar los moviminetos:', error);
-  //     },
-  //   });
-  // }
 
 }

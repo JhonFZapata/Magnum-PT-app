@@ -2,6 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface ResGameDTO {
+    game:GameDTO,
+    playerOneName:string,
+    playerTwoName:string
+  }
+
+
 export interface GameDTO {
   id: number;
   playerOneId: number;
@@ -16,8 +23,8 @@ export interface RoundDTO {
   playerOneMove: string;
   playerTwoMove: string;
   winnerPlayerId?: number;
-  playerOneName?: string;
-  playerTwoName?: string;
+  playerOneName: string;
+  playerTwoName: string;
 }
 
 
@@ -30,9 +37,9 @@ export class InGameService {
   constructor(private http: HttpClient) {}
 
     // Iniciar un nuevo juego
-    startGame(playerOneId: number, playerTwoId: number): Observable<GameDTO> {
-      const payload = { playerOneId, playerTwoId };
-      return this.http.post<GameDTO>(`${this.apiUrl}/game/start`, payload);
+    startGame(playerOneName: string, playerTwoName: string): Observable<ResGameDTO> {
+      const payload = { playerOneName, playerTwoName };
+      return this.http.post<ResGameDTO>(`${this.apiUrl}/game/start`, payload);
     }
 
     // Jugar una ronda
@@ -42,9 +49,12 @@ export class InGameService {
       playerTwoMove: string
     ): Observable<RoundDTO> {
       const payload = {
+        gameId:gameId,
         playerOneMove: playerOneMove,
         playerTwoMove: playerTwoMove
       };
+      console.log('ser tt',payload);
+      
       return this.http.post<RoundDTO>(`${this.apiUrl}/game/${gameId}/play-round`, payload);
     }
 
