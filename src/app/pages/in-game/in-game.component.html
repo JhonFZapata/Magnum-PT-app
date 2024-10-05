@@ -1,0 +1,103 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+  <div class="max-w-3xl w-full bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold text-center mb-4">{{ 'playerOne.name' }} Vs {{ 'playerTwo.name' }}</h2>
+    <hr class="mb-4">
+
+    <!-- Iniciar el juego -->
+    <div *ngIf="!game" class="mb-6">
+      <p class="text-center mb-4">Ingresa los IDs de los jugadores para iniciar el juego:</p>
+      <div class="flex justify-between items-center mb-4">
+        <label for="playerOneId" class="font-medium">Jugador 1 ID:</label>
+        <input 
+          type="text" 
+          id="playerOneId" 
+          #playerOneId 
+          class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        />
+      </div>
+
+      <div class="flex justify-between items-center mb-4">
+        <label for="playerTwoId" class="font-medium">Jugador 2 ID:</label>
+        <input 
+          type="text" 
+          id="playerTwoId" 
+          #playerTwoId 
+          class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        />
+      </div>
+
+      <div class="text-center">
+        <button 
+          (click)="startGame(+playerOneId.value, +playerTwoId.value)" 
+          class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          Iniciar Juego
+        </button>
+            <a 
+              role="button"
+              routerLink="/game" 
+              class="text-blue-500 text-center px-6 py-2 border hover:text-blue-900 transition duration-300 block mx-auto"
+          >
+              Registrarnos
+          </a>
+      </div>
+    </div>
+
+    <!-- Mostrar el estado del juego -->
+    <div *ngIf="game" class="mb-6">
+      <h3 class="text-xl font-medium mb-4">Rondas Jugadas: {{ game.rounds.length }}</h3>
+      <ul class="mb-4">
+        <li 
+          *ngFor="let round of game.rounds" 
+          class="bg-gray-100 p-4 rounded-lg mb-2"
+        >
+          <p>Ronda {{ round.id }}: 
+            Movimiento Jugador 1: {{ round.playerOneMove }} - 
+            Movimiento Jugador 2: {{ round.playerTwoMove }} - 
+            Ganador: {{ round.winnerPlayerId === game?.playerOneId ? 'Jugador 1' : round.winnerPlayerId === game?.playerTwoId ? 'Jugador 2' : 'Empate' }}
+          </p>
+        </li>
+      </ul>
+
+      <!-- Selección de movimientos para la siguiente ronda -->
+      <div *ngIf="!game.isFinished" class="mb-4">
+        <p class="text-center mb-4">Elige el movimiento para ambos jugadores:</p>
+        <div class="flex justify-between items-center mb-4">
+          <label class="font-medium">Movimiento Jugador 1:</label>
+          <select 
+            [(ngModel)]="playerOneMove" 
+            class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+          >
+            <option value="Piedra">Piedra</option>
+            <option value="Papel">Papel</option>
+            <option value="Tijera">Tijera</option>
+          </select>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+          <label class="font-medium">Movimiento Jugador 2:</label>
+          <select 
+            [(ngModel)]="playerTwoMove" 
+            class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+          >
+            <option value="Piedra">Piedra</option>
+            <option value="Papel">Papel</option>
+            <option value="Tijera">Tijera</option>
+          </select>
+        </div>
+
+        <div class="text-center">
+          <button 
+            (click)="playRound()" 
+            class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300"
+          >
+            Jugar Ronda
+          </button>
+        </div>
+      </div>
+
+      <!-- Mostrar mensaje del estado del juego -->
+      <p class="text-center text-lg font-medium text-blue-600">{{ message }}</p>
+    </div>
+  </div>
+</div>
