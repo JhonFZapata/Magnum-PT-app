@@ -72,6 +72,16 @@ export class InGameComponent implements OnInit {
       this.message = 'Primero debes iniciar un juego.';
       return;
     }
+    
+    if(!this.playerOneMove || !this.playerTwoMove){
+      
+      this.errorMessage = 'Elijan ambos un movimiento';
+      return;
+    }
+    this.playerOneMove = ''
+    this.playerTwoMove = ''
+
+    this,this.errorMessage = '';
 
     this.inGamerService
       .playRound(this.game.id, this.playerOneMove, this.playerTwoMove)
